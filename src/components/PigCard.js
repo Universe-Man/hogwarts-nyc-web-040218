@@ -27,11 +27,12 @@ class PigCard extends Component {
     )
   }
 
-  handleClick = () => {
+  handleClick = (e) => {
     if (!this.state.clicked) {
       this.setState({
         clicked: true
       })
+      this.props.getPic(e.target.src)
     } else {
       this.setState({
         clicked: false

@@ -1,11 +1,10 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 const SortFilters = (props) => {
   return(
-  <button onClick={props.sortWeight}>
-      Sort Whatever
+    <button onClick={props.handler}>
+      {props.name}
     </button>
-
   )
 }
 
