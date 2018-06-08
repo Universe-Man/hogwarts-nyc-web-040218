@@ -10,48 +10,62 @@ class Pigs extends React.Component {
 
     this.state = {
       value: '',
-      sorted: false
-      // myPigs: [{}{}{}]
+      myPigs: this.props.hogs,
+      sorted: false,
+      greasy: false
     }
   }
 
   onInputChange = (e) => {
-    this.setState({
-      value: e.target.value,
-      sorted: false
-    })
-  }
-
-  postPigs = () => {
-    let hogs;
-
     const filteredByName = [...this.props.hogs].filter( hogObj => hogObj.name.toLowerCase().includes(this.state.value.toLowerCase()) )
 
-    const sortedByWeight = [...this.props.hogs].sort((hog1, hog2) => {
-      return hog1.weight - hog2.weight
+    this.setState({
+      value: e.target.value,
+      myPigs: filteredByName
     })
-
-    if (this.state.value !== '') {
-      hogs = filteredByName
-    } else if (this.state.sorted) {
-      hogs = sortedByWeight
-    } else {
-      hogs = this.props.hogs
-    }
-
-    return hogs.map( hog => (
-      < PigCard key={hog.name} name={hog.name} specialty={hog.specialty} greased={hog.greased} weight={hog.weight} medal={hog.medal} />
-    ) )
   }
 
   sortWeight = () => {
-    this.setState({
-      sorted: true
+    const sortedByWeight = [...this.state.myPigs].sort((hog1, hog2) => {
+      return hog1.weight - hog2.weight
     })
-    // console.log(this.props.hogs);
-    // this.props.hogs.map( hogObj =>
-    // console.log(hogObj.weight));
 
+    if (!this.state.sorted) {
+      this.setState({
+        sorted: true,
+        myPigs: sortedByWeight
+      })
+    }
+    else {
+      this.setState({
+        sorted: false,
+        myPigs: this.props.hogs
+      })
+    }
+  }
+
+  toggleGreased = () => {
+    const gimmieGreased = [...this.state.myPigs].filter( hog => hog.greased )
+
+    if (this.state.myPigs === this.props.hogs){
+      this.setState({
+        greasy: true,
+        myPigs: gimmieGreased
+      })
+    } else {
+      this.setState({
+        greasy: false,
+        myPigs: this.props.hogs
+      })
+    }
+  }
+
+  postPigs = () => {
+    let hogs = this.state.myPigs
+
+    return hogs.map( hog => (
+      < PigCard key={hog.name} name={hog.name} specialty={hog.specialty} greased={hog.greased} weight={hog.weight} medal={hog.medal} getPic={this.props.getPic}/>
+    ) )
   }
 
   render() {
@@ -60,7 +74,8 @@ class Pigs extends React.Component {
     return (
       <div>
         <Filters onInputChange={this.onInputChange} value={this.state.value}/>
-        <SortFilters sortWeight={this.sortWeight}/>
+        <SortFilters name="Sort by Weight" handler={this.sortWeight}/>
+        <SortFilters name="Show Greased Only" handler={this.toggleGreased}/>
         <div id="pigs-container">
           {pigsCards}
         </div>

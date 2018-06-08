@@ -5,11 +5,23 @@ import hogs from '../porkers_data';
 import Pigs from './Pigs'
 
 class App extends Component {
+  state = {
+    pigPic: ''
+  }
+
+  getPic = (imgSrc) => {
+    console.log(typeof imgSrc);
+    this.setState({
+      pigPic: imgSrc
+    })
+
+  }
+
   render() {
     return (
       <div className="App">
-          < Nav />
-          < Pigs hogs={hogs}/>
+        < Nav pic={this.state.pigPic} />
+        < Pigs hogs={hogs} getPic={this.getPic} />
       </div>
     )
   }
