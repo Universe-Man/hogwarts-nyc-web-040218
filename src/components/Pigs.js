@@ -10,6 +10,7 @@ class Pigs extends React.Component {
 
     this.state = {
       value: '',
+      sorted: false
       // myPigs: [{}{}{}]
     }
   }
